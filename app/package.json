@@ -5,6 +5,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "start": "webpack-dev-server --mode development"
   },
   "dependencies": {
