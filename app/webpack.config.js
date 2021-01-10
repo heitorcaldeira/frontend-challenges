@@ -57,7 +57,7 @@ module.exports = (_, args) => {
           use: ['file-loader'],
         },
         {
-          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          test: /\.(ttf)$/,
           use: [
             {
               loader: 'file-loader',
