@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { darkTheme, lightTheme } from '../assets/styles/themes';
 import { Theme } from '../models/theme.model';
 
@@ -21,5 +21,5 @@ export function useTheme(defaultTheme: Theme) {
     setTheme(theme.name === lightTheme.name ? darkTheme : lightTheme);
   };
 
-  return [theme, toggleTheme];
+  return { theme, toggleTheme };
 }

@@ -5,7 +5,7 @@ import { lightTheme } from './assets/styles/themes';
 import { useTheme } from './hooks/use-theme';
 
 const App: React.FC = () => {
-  const [theme, toggleTheme] = useTheme(lightTheme);
+  const { theme, toggleTheme } = useTheme(lightTheme);
 
   return (
     <ThemeProvider theme={theme}>
