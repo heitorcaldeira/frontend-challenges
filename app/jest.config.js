@@ -12,6 +12,7 @@ module.exports = {
     '!src/index.tsx',
     '!src/App.tsx',
     '!src/assets/styles/*.{ts,tsx}',
+    '!src/router/*.{ts,tsx}',
     '!<rootDir>/node_modules/',
     '!<rootDir>/path/to/dir/',
   ],
