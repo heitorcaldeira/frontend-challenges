@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { darkTheme, lightTheme } from '../assets/styles/themes';
 import { Theme } from '../models/theme.model';
 
