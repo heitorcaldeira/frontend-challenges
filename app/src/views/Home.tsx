@@ -3,6 +3,7 @@ import { Container } from '../components/Container';
 import styled from 'styled-components';
 import ProductList from '../components/ProductList';
 import { Product } from '../models/product.model';
+import { useTranslation } from 'react-i18next';
 
 export const HomeContainer = styled.div`
   h1 {
@@ -17,6 +18,7 @@ export const HomeContainer = styled.div`
 `;
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const products: Product[] = [
     {
       id: 17,
@@ -59,7 +61,7 @@ const Home: React.FC = () => {
   return (
     <HomeContainer>
       <Container>
-        <h1>Produtos</h1>
+        <h1>{t('products')}</h1>
         <ProductList products={products} />
       </Container>
     </HomeContainer>
