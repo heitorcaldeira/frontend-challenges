@@ -5,6 +5,7 @@ export interface Theme {
   breakpoints: Breakpoint;
   primaryColor: string;
   primaryHoverColor: string;
+  secondaryColor: string;
   dangerColor: string;
   textColorOnPrimary: string;
   textColor: string;
@@ -16,4 +17,6 @@ export interface Theme {
   backgroundColor: string;
   textColorOnDisabled: string;
   borderRadius: string;
+  lightGray: string;
+  gray: string;
 }

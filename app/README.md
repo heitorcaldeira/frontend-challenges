@@ -21,3 +21,7 @@ Faz o build da aplicação para produção na pasta `dist`.
 ### `yarn test`
 
 Roda todos os testes da aplicação.
+
+### `yarn test:coverage`
+
+Roda todos os testes da aplicação e gera o relatório de cobertura de testes.

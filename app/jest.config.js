@@ -7,6 +7,7 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  transform: { '\\.svg$': '<rootDir>/__mocks__/fileTransform.js' },
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/index.tsx',

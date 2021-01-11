@@ -1,10 +1,17 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { darkTheme } from '../assets/styles/themes';
 
 const Providers = ({ children, theme }: any) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Switch>{children}</Switch>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 };
 
 function renderWithProviders(ui, { theme = darkTheme, ...renderOptions } = {}) {
