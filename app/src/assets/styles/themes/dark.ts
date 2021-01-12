@@ -3,6 +3,7 @@ import { Theme } from '../../../models/theme.model';
 export const darkTheme: Theme = {
   name: 'dark',
   breakpoints: {
+    xs: '414px',
     sm: '576px',
     md: '768px',
     lg: '992px',
@@ -22,6 +23,7 @@ export const darkTheme: Theme = {
   disabledColor: '#D8D8D8',
   textColorOnDisabled: '#333333',
   borderRadius: '3px',
+  borderColor: '#A7C5E5',
   lightGray: '#DFE4E8',
   gray: '#637381',
 };

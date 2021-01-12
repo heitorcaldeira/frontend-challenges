@@ -17,6 +17,7 @@ export interface Theme {
   backgroundColor: string;
   textColorOnDisabled: string;
   borderRadius: string;
+  borderColor: string;
   lightGray: string;
   gray: string;
 }
