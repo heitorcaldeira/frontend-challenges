@@ -1,4 +1,12 @@
 {
   "products": "Produtos",
-  "product": "Produto"
+  "product": "Produto",
+  "save": "Salvar alterações",
+  "weight": "Peso",
+  "height": "Altura",
+  "depth": "Profundidade",
+  "width": "Largura",
+  "salePrice": "Preço de venda",
+  "promotionalPrice": "Preço promocional",
+  "stock": "Estoque"
 }
