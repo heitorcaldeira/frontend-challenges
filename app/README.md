@@ -25,3 +25,5 @@ Roda todos os testes da aplicação.
 ### `yarn test:coverage`
 
 Roda todos os testes da aplicação e gera o relatório de cobertura de testes.
+
+## Testes Cypress - NOK
