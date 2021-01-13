@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container } from '../components/Container';
 import styled from 'styled-components';
 import ProductList from '../components/ProductList';
 import { Product } from '../models/product.model';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@apollo/client';
+import { PRODUCTS_PAGINATED } from '../queries/products.query';
+import Loading from '../components/Loading/Loading';
 
 export const HomeContainer = styled.div`
   h1 {
@@ -17,55 +20,53 @@ export const HomeContainer = styled.div`
   }
 `;
 
-const Home: React.FC = () => {
+const Home: React.FC = React.memo(() => {
   const { t } = useTranslation();
-  const products: Product[] = [
-    {
-      id: 17,
-      name: 'Pen Drive Usb 16gb Otg 3em1 C/cartao Microsd Unidade U-tech',
-      ean: '7898597390658',
-      category: 'Eletrônicos',
-      imageUrl:
-        'https://images-shoptime.b2w.io/produtos/01/00/oferta/56869/1/56869194G1.jpg',
-      description:
-        'Pen Drive + Cartão de Memória Micro-Sd Otg U-Tech 16GB PretoTransfira arquivos facilmente de seu smartphone ou tablet diretamente para um computador. Sistema Operacional Compatível: Linux, Macintosh, Microsoft Windows',
-      package: {
-        height: 1,
-        width: 10,
-        depth: 12,
-        weight: 300,
-      },
-      salePrice: 4500,
-      promotionalPrice: 4500,
-      quantity: 1,
-    },
-    {
-      id: 18,
-      name: 'Livro - Sol da meia-noite: (Midnight Sun) - Série Crepúsculo',
-      ean: '9786555600292',
-      category: 'Livros',
-      imageUrl: null,
-      description:
-        'Aguardado há mais de uma década, &lt;i&gt;Sol da meia-noite&lt;/i&gt;, novo livro do universo de &lt;i&gt;Crepúsculo&lt;/i&gt;, chega ao Brasil em lançamento mundial no dia 4 de agosto',
-      package: {
-        height: 23,
-        width: 16,
-        depth: 4,
-        weight: 1030,
-      },
-      salePrice: 5490,
-      promotionalPrice: 5490,
-      quantity: 2,
-    },
-  ];
+  const [page, setPage] = useState(0);
+  const [products, setProducts] = useState([]);
+  const loader = useRef(null);
+
+  const { data, loading } = useQuery(PRODUCTS_PAGINATED, {
+    variables: { page },
+  });
+
+  const handleObserver = (entities) => {
+    const target = entities[0];
+
+    if (target.isIntersecting) {
+      setPage((page) => page + 1);
+    }
+  };
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver(handleObserver, options);
+    if (loader.current) {
+      observer.observe(loader.current as any);
+    }
+  }, []);
+
+  useEffect(() => {
+    const list = data?.allSkus || [];
+    setProducts((products) => [...products, ...list] as any);
+  }, [page, data?.allSkus]);
+
   return (
     <HomeContainer>
       <Container>
         <h1>{t('products')}</h1>
         <ProductList products={products} />
+        <div className='loading' ref={loader}>
+          {loading && <Loading />}
+        </div>
       </Container>
     </HomeContainer>
   );
-};
+});
 
 export default Home;

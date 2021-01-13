@@ -6,7 +6,7 @@ const Loading: React.FC = () => {
 
   return (
     <svg
-      style={{ margin: '50vh auto 0', display: 'block' }}
+      style={{ margin: '0 auto', display: 'block' }}
       width='50px'
       height='50px'
       viewBox='0 0 100 100'
