@@ -30,7 +30,10 @@ const IncrementDecrement: React.FC<Props> = ({
   const { dangerColor, primaryColor } = useContext(ThemeContext);
   return (
     <IncDecContainer>
-      <IncDecButton onClick={() => current > 0 && onDecrement(current - 1)}>
+      <IncDecButton
+        onClick={() => current > 0 && onDecrement(current - 1)}
+        id='dec'
+      >
         <svg
           width='21'
           height='20'
@@ -46,7 +49,7 @@ const IncrementDecrement: React.FC<Props> = ({
           />
         </svg>
       </IncDecButton>
-      <IncDecButton onClick={() => onIncrement(current + 1)}>
+      <IncDecButton onClick={() => onIncrement(current + 1)} id='inc'>
         <svg
           width='21'
           height='20'
