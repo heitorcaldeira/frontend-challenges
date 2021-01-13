@@ -1,0 +1,12 @@
+{
+  "products": "Products",
+  "product": "Product",
+  "save": "Save",
+  "weight": "Weight",
+  "height": "Height",
+  "depth": "Depth",
+  "width": "Width",
+  "salePrice": "Sale price",
+  "promotionalPrice": "Promotional price",
+  "stock": "Stock"
+}
