@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const PRODUCTS_PAGINATED = gql`
-  query GetProductsPaginated($page: Int!) {
-    allSkus(page: $page, perPage: 10) {
+  query GetProductsPaginated($page: Int!, $perPage: Int) {
+    allSkus(page: $page, perPage: $perPage) {
       id
       name
       imageUrl

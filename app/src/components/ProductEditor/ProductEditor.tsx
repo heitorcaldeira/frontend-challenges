@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Product } from '../../models/product.model';
 import placeholder from '../../assets/images/image-placeholder.svg';
@@ -8,10 +8,12 @@ import { useTranslation } from 'react-i18next';
 import IncrementDecrement from '../IncrementDecrement';
 import InputText from '../InputText';
 import ProductInfo from '../ProductInfo/ProductInfo';
+import Loading from '../Loading/Loading';
 
 interface Props {
   product: Product;
-  onUpdateProduct: () => void;
+  onUpdateProduct: (productEdited) => void;
+  isUpdating: boolean;
 }
 
 const StyledProductEditor = styled.div`
@@ -44,56 +46,82 @@ const Image = styled.img`
 `;
 
 const ProductEditor: React.FC<Props> = React.memo(
-  ({ product, onUpdateProduct }) => {
+  ({ product, onUpdateProduct, isUpdating }) => {
+    const [edited, setEdited] = useState({ ...product });
     const { t } = useTranslation();
 
-    const RenderInformation = ({ product }) => {
-      return (
-        <div className='row'>
-          <div className='col-4'>
-            {t('stock')}
-            <InputText value={product.quantity} onChange={() => {}} />
-          </div>
-          <div className='col-8'>
-            <div style={{ position: 'absolute', bottom: 0, right: 15 }}>
-              <IncrementDecrement
-                onDecrement={() => {}}
-                onIncrement={() => {}}
-              />
-            </div>
-          </div>
-          <div className='col-6'>
-            {t('salePrice')}
-            <InputText value={product.salePrice} onChange={() => {}} />
-          </div>
-          <div className='col-6' style={{ paddingLeft: 0 }}>
-            {t('promotionalPrice')}
-            <InputText value={product.promotionalPrice} onChange={() => {}} />
-          </div>
-        </div>
-      );
+    const updateForm = (field, value, isPackage = false) => {
+      let packageData = { ...edited.package };
+
+      if (isPackage) {
+        packageData = {
+          ...packageData,
+          [field]: value,
+        };
+      }
+
+      const updated = {
+        ...edited,
+        [field]: value,
+        package: {
+          ...packageData,
+        },
+      };
+
+      setEdited(updated);
     };
 
     return (
       <StyledProductEditor>
-        <Title>{product.name}</Title>
+        <Title>{edited.name}</Title>
         <VerticalSpacing size={20}>
           <ImageContainer>
-            <Image src={product.imageUrl || placeholder} />
+            <Image src={edited.imageUrl || placeholder} />
           </ImageContainer>
           <VerticalSpacing size={20}>
-            <RenderInformation product={product} />
+            <div className='row'>
+              <div className='col-4'>
+                {t('stock')}
+                <InputText
+                  value={edited.quantity}
+                  onChange={(e) => updateForm('quantity', e.target.value)}
+                />
+              </div>
+              <div className='col-8'>
+                <div style={{ position: 'absolute', bottom: 0, right: 15 }}>
+                  <IncrementDecrement
+                    current={edited.quantity}
+                    onDecrement={(value) => updateForm('quantity', value)}
+                    onIncrement={(value) => updateForm('quantity', value)}
+                  />
+                </div>
+              </div>
+              <div className='col-6'>
+                {t('salePrice')}
+                <InputText
+                  value={edited.salePrice}
+                  onChange={(e) => updateForm('salePrice', e.target.value)}
+                />
+              </div>
+              <div className='col-6' style={{ paddingLeft: 0 }}>
+                {t('promotionalPrice')}
+                <InputText
+                  value={edited.promotionalPrice}
+                  onChange={(e) =>
+                    updateForm('promotionalPrice', e.target.value)
+                  }
+                />
+              </div>
+            </div>
           </VerticalSpacing>
           <VerticalSpacing size={20}>
             <ProductInfo
-              onValueChanges={() => {}}
-              weight={product.package.weight}
-              depth={product.package.depth}
-              height={product.package.height}
-              width={product.package.width}
+              onValueChanges={(field, value) => updateForm(field, +value, true)}
+              product={edited}
             />
           </VerticalSpacing>
-          <Button text={t('save')} callback={onUpdateProduct} />
+          {isUpdating && <Loading />}
+          <Button text={t('save')} callback={() => onUpdateProduct(edited)} />
         </VerticalSpacing>
       </StyledProductEditor>
     );
