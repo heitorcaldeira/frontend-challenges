@@ -11,6 +11,7 @@ import './i18n';
 
 const App: React.FC = () => {
   const { theme, toggleTheme } = useTheme(lightTheme);
+
   return (
     <ApolloProvider client={graphqlClient}>
       <ThemeProvider theme={theme}>

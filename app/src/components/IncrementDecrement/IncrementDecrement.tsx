@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 
 interface Props {
-  onIncrement: () => void;
-  onDecrement: () => void;
+  onIncrement: (e) => void;
+  onDecrement: (e) => void;
+  current: number;
 }
 
 const IncDecContainer = styled.div`
@@ -21,11 +22,15 @@ const IncDecButton = styled.button`
   background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 `;
 
-const IncrementDecrement: React.FC<Props> = ({ onIncrement, onDecrement }) => {
+const IncrementDecrement: React.FC<Props> = ({
+  onIncrement,
+  onDecrement,
+  current,
+}) => {
   const { dangerColor, primaryColor } = useContext(ThemeContext);
   return (
     <IncDecContainer>
-      <IncDecButton>
+      <IncDecButton onClick={() => current > 0 && onDecrement(current - 1)}>
         <svg
           width='21'
           height='20'
@@ -41,7 +46,7 @@ const IncrementDecrement: React.FC<Props> = ({ onIncrement, onDecrement }) => {
           />
         </svg>
       </IncDecButton>
-      <IncDecButton>
+      <IncDecButton onClick={() => onIncrement(current + 1)}>
         <svg
           width='21'
           height='20'

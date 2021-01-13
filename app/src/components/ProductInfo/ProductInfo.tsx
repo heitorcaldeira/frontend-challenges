@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from 'styled-components';
+import { Product } from '../../models/product.model';
 import InputText from '../InputText';
 
 export const ProductInfoContainer = styled.div`
@@ -24,42 +25,29 @@ export const ProductInfoContainer = styled.div`
 `;
 
 interface Props {
-  onValueChanges: () => void;
-  weight: number;
-  height: number;
-  width: number;
-  depth: number;
+  onValueChanges: (field, value) => void;
+  product: Product;
 }
 
-const ProductInfo: React.FC<Props> = ({
-  onValueChanges,
-  weight,
-  height,
-  width,
-  depth,
-}) => {
+const ProductInfo: React.FC<Props> = ({ onValueChanges, product }) => {
   const { t } = useTranslation();
 
   const fields = [
     {
-      label: t('weight'),
+      label: 'weight',
       unit: 'kg',
-      value: weight,
     },
     {
-      label: t('height'),
+      label: 'height',
       unit: 'cm',
-      value: height,
     },
     {
-      label: t('width'),
+      label: 'width',
       unit: 'cm',
-      value: width,
     },
     {
-      label: t('depth'),
+      label: 'depth',
       unit: 'cm',
-      value: depth,
     },
   ];
 
@@ -68,12 +56,12 @@ const ProductInfo: React.FC<Props> = ({
       {fields.map((field) => {
         return (
           <div className='line' key={field.label}>
-            <span>{field.label}</span>
+            <span>{t(field.label)}</span>
             <div className='input'>
               <InputText
                 width={'65px'}
-                onChange={(e) => {}}
-                value={field.value}
+                onChange={(e) => onValueChanges(field.label, e.target.value)}
+                value={product.package[field.label]}
               />{' '}
               <span>{field.unit}</span>
             </div>

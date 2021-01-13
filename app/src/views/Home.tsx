@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Container } from '../components/Container';
 import styled from 'styled-components';
 import ProductList from '../components/ProductList';
-import { Product } from '../models/product.model';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { PRODUCTS_PAGINATED } from '../queries/products.query';
@@ -27,7 +26,7 @@ const Home: React.FC = React.memo(() => {
   const loader = useRef(null);
 
   const { data, loading } = useQuery(PRODUCTS_PAGINATED, {
-    variables: { page },
+    variables: { page, perPage: 10 },
   });
 
   const handleObserver = (entities) => {
@@ -39,20 +38,29 @@ const Home: React.FC = React.memo(() => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const options = {
       root: null,
-      rootMargin: '20px',
+      rootMargin: '100px',
       threshold: 1.0,
     };
 
     const observer = new IntersectionObserver(handleObserver, options);
+
     if (loader.current) {
       observer.observe(loader.current as any);
     }
+
+    return () => {
+      if (loader.current) {
+        observer.unobserve(loader.current as any);
+      }
+    };
   }, []);
 
   useEffect(() => {
     const list = data?.allSkus || [];
+
     setProducts((products) => [...products, ...list] as any);
   }, [page, data?.allSkus]);
 

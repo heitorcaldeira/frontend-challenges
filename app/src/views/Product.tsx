@@ -1,38 +1,66 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Container } from '../components/Container';
 import { useTranslation } from 'react-i18next';
 import Breadcrumb from '../components/Breadcrumb';
-import VerticalSpacing from '../components/VerticalSpacing/VerticalSpacing';
+import VerticalSpacing from '../components/VerticalSpacing';
 import ProductEditor from '../components/ProductEditor';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { PRODUCT_BY_ID } from '../queries/product.query';
+import { useParams } from 'react-router-dom';
+import Loading from '../components/Loading';
+import { UPDATE_PRODUCT } from '../queries/update-product.query';
 
-const Product: React.FC = () => {
+interface Props {
+  productId: string;
+}
+
+const Product: React.FC<Props> = () => {
+  const { productId } = useParams<Props>();
   const { t } = useTranslation();
-  const product = {
-    id: 18,
-    name: 'Livro - Sol da meia-noite: (Midnight Sun) - Série Crepúsculo',
-    ean: '9786555600292',
-    category: 'Livros',
-    imageUrl: null,
-    description:
-      'Aguardado há mais de uma década, &lt;i&gt;Sol da meia-noite&lt;/i&gt;, novo livro do universo de &lt;i&gt;Crepúsculo&lt;/i&gt;, chega ao Brasil em lançamento mundial no dia 4 de agosto',
-    package: {
-      height: 23,
-      width: 16,
-      depth: 4,
-      weight: 1030,
+  const [dispatchUpdate] = useMutation(UPDATE_PRODUCT, {
+    update(cache, { data: { updateSku } }) {
+      cache.modify({
+        fields: {
+          allSkus(existingProducts = []) {
+            const updtProduct = cache.writeFragment({
+              id: productId,
+              data: { ...updateSku },
+              fragment: gql`
+                fragment UpdateSku on Sku {
+                  quantity
+                  salePrice
+                  promotionalPrice
+                  package
+                }
+              `,
+            });
+            return [...existingProducts, updtProduct];
+          },
+        },
+      });
     },
-    salePrice: 5490,
-    promotionalPrice: 5490,
-    quantity: 2,
+  });
+
+  const updateProduct = (product) => {
+    dispatchUpdate({ variables: { ...product } });
   };
 
-  const updateProduct = useCallback(() => {}, []);
+  const { data, loading } = useQuery(PRODUCT_BY_ID, {
+    variables: { id: productId },
+  });
 
   return (
     <Container>
       <Breadcrumb link={'/'} title={t('products')} />
       <VerticalSpacing size={15}>
-        <ProductEditor product={product} onUpdateProduct={updateProduct} />
+        {loading && <Loading />}
+        {!loading && (
+          <ProductEditor
+            product={data?.Sku}
+            onUpdateProduct={updateProduct}
+            isUpdating={false}
+          />
+        )}
       </VerticalSpacing>
     </Container>
   );
